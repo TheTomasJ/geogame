@@ -6,21 +6,26 @@
 #mapid { 
     height: 350px; 
 }
+
 .player {
     text-align: center;
     font-size: 3em;
 }
+
 #player_0 {
     color: red;
 }
+
 #player_1 {
     color: blue;
 }
+
 .disabled {
     z-index: 1000;
     opacity: 0.33;
     pointer-events: none;
 }
+
 .btn-secondary {
     background-color: #ef8;
 }

@@ -108,7 +108,7 @@
           changePlayer();
         });
 
-        $.post( "/from_click", { lat: e.latlng.lat, lng: e.latlng.lng}, function(data) {
+        $.get( "/close_villages", { lat: e.latlng.lat, lng: e.latlng.lng}, function(data) {
           for (var i in data['result']) {  
             $('#output-town-'+i).text((data['result'][i][0]));
             $('#output-population-'+i).text((data['result'][i][1]));

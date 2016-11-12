@@ -3,21 +3,24 @@ from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
+
 def index(request):
     with connection.cursor() as cursor:
-        cursor.execute("""
+        sql = """
             DELETE FROM freeland;
             INSERT INTO 
                 freeland (way) 
             VALUES 
-                (ST_Multi((SELECT way FROM planet_osm_polygon where name = 'Slovensko')))
-            """)
+                (ST_Multi((SELECT way FROM planet_osm_polygon WHERE name = 'Slovensko')))
+        """
+        cursor.execute(sql)
     return render(request, 'index.html', {})
+
 
 @csrf_exempt
 def from_click(request):
-    lat = request.POST['lat']
-    lng = request.POST['lng']
+    lat = request.GET['lat']
+    lng = request.GET['lng']
     with connection.cursor() as cursor:
         sql = """
             SELECT 
@@ -26,21 +29,20 @@ def from_click(request):
                     ST_Transform(ST_SetSRID(ST_MakePoint(%s, %s), 4326),900913)
                 )
             FROM 
-                planet_osm_point as a 
+                planet_osm_point AS a 
             WHERE 
-                (place = 'town' or place='village' or place='city') and CAST(coalesce(population, '0') AS integer) > 10000 
+                (place = 'town' OR place='village' OR place='city') AND CAST(coalesce(population, '0') AS integer) > 10000 
             ORDER BY
                 ST_Distance(
                     way,
                     ST_Transform(ST_SetSRID(ST_MakePoint(%s, %s), 4326),900913)
                 )
             LIMIT 3
-            """ % (lng, lat, lng, lat)
-        cursor.execute(
-            sql
-        )
+        """
+        cursor.execute(sql, [lng,lat,lng,lat])
         row = cursor.fetchall()
     return JsonResponse({'result':row})
+
 
 @csrf_exempt
 def colonise(request):
@@ -48,7 +50,6 @@ def colonise(request):
     lng = request.POST['lng']
     distance = request.POST['distance']
     distance = int(distance)*1.5
-
     with connection.cursor() as cursor:
 
         # get targetet population
@@ -64,8 +65,8 @@ def colonise(request):
                 )
                 AND
                 (place = 'town' OR place='village' OR place='city') 
-            """ % (lng, lat, distance)
-        cursor.execute(sql)
+        """
+        cursor.execute(sql, [lng, lat, distance])
         row = cursor.fetchone()
         try:
             manipulated = int(row[0])
@@ -86,25 +87,7 @@ def colonise(request):
                 ),
                 900913
             ))
-        """ % (lng, lat, distance)
-        cursor.execute(sql)
-        print manipulated
+        """
+        cursor.execute(sql, [lng, lat, distance])
 
     return JsonResponse({'result':row, 'manipulated': str(manipulated)})
-
-    """
-            WITH RECURSIVE roads AS (
-                (
-                    SELECT a.name,a.way FROM planet_osm_line as a WHERE 
-                    ST_Distance(way,ST_Transform(ST_SetSRID(ST_MakePoint(%s, %s), 4326),900913)) < 60
-                    AND a.highway <> ''
-                )
-                UNION ALL
-                (
-                    SELECT b.name,b.way FROM planet_osm_line as b
-                    JOIN roads ON ST_TOUCHES(roads.way,b.way) AND b.highway <> ''
-                )
-            ) SELECT ST_AsGeoJson(ST_Transform(way, 4326)) FROM roads LIMIT 4
-            """
-
-", ST_AsGeoJson(ST_Transform(way, 4326))"

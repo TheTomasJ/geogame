@@ -145,5 +145,5 @@ INITIAL_MIGRATION = """
     (
       id SERIAL PRIMARY KEY,
       way geometry(MultiPolygon,900913)
-    )
+    );
 """
