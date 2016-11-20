@@ -10,113 +10,59 @@
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}">
+    <title>GeoGame</title>
   </head>
-  <body>
+  <body onload="init()">
     <div>
       <div id="mapid"></div>
       <div class="row player">
         <div class="part col-md-6 disabled">
           Reds<br>
           <span class="manipulated">manipulated population:</span> <span id="player_0"> 0 </span> <br>
-          <span onclick="upgrade(0)" class="btn btn-secondary"> Invest (+10000m)</span>
+          <span onclick="upgrade(0)" class="btn btn-secondary"> Invest (+5000m)</span>
         </div>
         <div class="part col-md-6" >
           Blues<br>
           <span class="manipulated">manipulated population:</span> <span id="player_1"> 0 </span> <br>
-          <span onclick="upgrade(1)" class="btn btn-secondary"> Invest (+10000m)</span>
+          <span onclick="upgrade(1)" class="btn btn-secondary"> Invest (+5000m)</span>
         </div>
       </div>
       <table class="table">
-        <tr>
-          <th>Obec</th>
-          <th>Populácia</th>
-          <th>Vzdialenosť</th>
-        </tr>
-        <tr>
-          <td>
-           <span id='output-town-0'></span>
-           [<span id='output-label-0'></span>]
-          </td>
-          <td id='output-population-0'></td>
-          <td id='output-distance-0'></td>
-        </tr>
-        <tr>
-          <td>
-           <span id='output-town-1'></span>
-           [<span id='output-label-1'></span>]
-          </td>
-          <td id='output-population-1'></td>
-          <td id='output-distance-1'></td>
-        </tr>
-        <tr>
-          <td>
-           <span id='output-town-2'></span>
-           [<span id='output-label-2'></span>]
-          </td>
-          <td id='output-population-2'></td>
-          <td id='output-distance-2'></td>
-        </tr>
+        <thead>
+          <tr>
+            <th>Obec</th>
+            <th>Populácia</th>
+            <th>Vzdialenosť</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+             <span id='output-town-0'></span>
+             [<span id='output-label-0'></span>]
+            </td>
+            <td id='output-population-0'></td>
+            <td id='output-distance-0'></td>
+          </tr>
+          <tr>
+            <td>
+             <span id='output-town-1'></span>
+             [<span id='output-label-1'></span>]
+            </td>
+            <td id='output-population-1'></td>
+            <td id='output-distance-1'></td>
+          </tr>
+          <tr>
+            <td>
+             <span id='output-town-2'></span>
+             [<span id='output-label-2'></span>]
+            </td>
+            <td id='output-population-2'></td>
+            <td id='output-distance-2'></td>
+          </tr>
+        </tbody>
       </table>
     </div>
-    <script>
-      var mymap = L.map('mapid').setView([48.5746963022463,19.5249155786772], 7);
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-        maxZoom: 18,
-        attribution: '',
-        id: 'mapbox.streets'
-      }).addTo(mymap);
-
-      players = [];
-      players.push(generate(0));
-      players.push(generate(1));
-      var player = 1;
-
-      function upgrade(player) {
-        players[player].distance+=10000;
-        changePlayer();
-      }
-      function changePlayer() {
-        player = 1 - player;
-        $(".part").toggleClass( 'disabled' );
-      }
-
-      function generate(i) {
-        return {
-          style: i == 0 ? {style: {color: '#F00', weight: 0}} : {style: {color: '#00F', weight: 0}},
-          score: 0,
-          container: '#player_' + i,
-          distance: 10000
-        }
-      }
-
-      function numberWithCommas(x) {
-          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
-
-      mymap.on('click', function(e) {
-        style = players[player].style;
-        players[player].distance += 0;
-
-        $.post( "/colonise", { lat: e.latlng.lat, lng: e.latlng.lng, distance: players[player].distance }, function(data) {
-          L.geoJSON(jQuery.parseJSON(data['result']), style).addTo(mymap);
-          var manipulated = data['manipulated'];
-          manipulated = parseInt(manipulated);
-          if (manipulated > 0) {
-            players[player].score += manipulated;
-          }
-          $(players[player].container).text(numberWithCommas(players[player].score));
-          changePlayer();
-        });
-
-        $.get( "/close_villages", { lat: e.latlng.lat, lng: e.latlng.lng}, function(data) {
-          for (var i in data['result']) {  
-            $('#output-town-'+i).text((data['result'][i][0]));
-            $('#output-population-'+i).text((data['result'][i][1]));
-            $('#output-label-'+i).text((data['result'][i][2]));
-            $('#output-distance-'+i).text(parseInt(parseFloat(data['result'][i][3])/1.5));
-          }
-        });
-      });
-    </script>
+    <script src="{% static 'app.js' %}"></script>
   </body>
 </html>
