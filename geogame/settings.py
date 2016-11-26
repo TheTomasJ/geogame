@@ -139,7 +139,7 @@ LEAFLET_CONFIG = {
 }
 
 INITIAL_MIGRATION = """
-    DROP TABLE public.freeland;
+    DROP TABLE IF EXISTS public.freeland;
 
     CREATE TABLE public.freeland
     (
