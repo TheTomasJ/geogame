@@ -33,8 +33,8 @@ DATABASES = {
 ### How to play
 1. This game is designed for two players (reds vs. blues)
 2. A player can do only one action in a single step
-..1. Manipulate population - assign population living in a city / town or village within the selected area on the map to increase a player's score
-..2. Invest - increases area of effect
+  * Manipulate population - assign population living in a city / town or village within the selected area on the map to increase a player's score
+  * Invest - increases area of effect
 3. Player who controlls most of the country is the winner
 
 ### Important scenarios
