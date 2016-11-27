@@ -45,4 +45,4 @@ DATABASES = {
 5. Delete non-manipulated area and copy a new polygon of the whole Slovakia as a new non-manipulated area on every refresh of the page (new game)
 
 ### First playing of the game at 20th OntoParty FIIT STU
-![alt tag](https://raw.githubusercontent.com/TheTomasJ/geogame/blob/master/sales_data/beta-testing.jpg)
+[[https://github.com/TheTomasJ/geogame/blob/master/sales_data/beta-testing.jpg]]
