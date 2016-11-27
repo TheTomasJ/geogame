@@ -37,6 +37,8 @@ DATABASES = {
   * Invest - increases area of effect
 3. Player who controlls most of the country is the winner
 
+![](https://github.com/TheTomasJ/geogame/blob/master/sales_data/ingame.png)
+
 ### Important scenarios
 1. Show three towns (cities) closest to the selected point (only towns (cities) with population higher than 10.000) - educative scenario
 2. Get portion from non-manipulated area 
@@ -44,5 +46,16 @@ DATABASES = {
 4. Get population of towns (cities, villages) which are inside the selected polygon from step 2
 5. Delete non-manipulated area and copy a new polygon of the whole Slovakia as a new non-manipulated area on every refresh of the page (new game)
 
-### First playing of the game at 20th OntoParty FIIT STU
+### Api
+#### Select 3 (bigger) towns closest to the selected point
+url: /close_villages
+method: GET
+get_data: {lat: double, lng: double}
+
+#### Manipulate population in area around click
+url: /colonise
+method: POST
+post_data: {lat: double, lng: double, distance: integer}
+
+### Playing of the game
 ![](https://github.com/TheTomasJ/geogame/blob/master/sales_data/beta-testing.jpg)
