@@ -31,7 +31,7 @@ def from_click(request):
             FROM 
                 planet_osm_point AS a 
             WHERE 
-                (place = 'town' OR place='village' OR place='city') AND CAST(coalesce(population, '0') AS integer) > 10000 
+                (place = 'town' OR place='village' OR place='city') AND CAST(coalesce(population, '0') AS integer) > 5000 
             ORDER BY
                 ST_Distance(
                     way,
