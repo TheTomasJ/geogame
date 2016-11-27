@@ -43,3 +43,6 @@ DATABASES = {
 3. Remove polygon from 2nd step from non-manipulated area
 4. Get population of towns (cities, villages) which are inside the selected polygon from step 2
 5. Delete non-manipulated area and copy a new polygon of the whole Slovakia as a new non-manipulated area on every refresh of the page (new game)
+
+### First playing of the game at 20th OntoParty FIIT STU
+![alt tag](https://raw.githubusercontent.com/TheTomasJ/geogame/blob/master/sales_data/beta-testing.jpg)
