@@ -48,14 +48,18 @@ DATABASES = {
 
 ### Api
 #### Select 3 (bigger) towns closest to the selected point
+```
 url: /close_villages
 method: GET
 get_data: {lat: double, lng: double}
+```
 
 #### Manipulate population in area around click
+```
 url: /colonise
 method: POST
 post_data: {lat: double, lng: double, distance: integer}
+```
 
 ### Playing of the game
 ![](https://github.com/TheTomasJ/geogame/blob/master/sales_data/beta-testing.jpg)
